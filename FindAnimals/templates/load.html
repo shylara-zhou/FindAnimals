@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>自定义图片上传</title>
+</head>
+<body>
+
+	<!-- 【1】图片上传必须要设置enctype="multipart/form-data"，
+	后台才能接收到数据 -->
+	<form method='post' enctype="multipart/form-data" action="/upload_handle/">
+		{% csrf_token %} {# 【2】post上传别忘记带上验证标识 #}
+		<input type="file" name="pic"><br/>
+		<input type="submit" value="上传">
+	</form>
+
+</body>
+</html>
