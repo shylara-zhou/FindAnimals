@@ -1,0 +1,67 @@
+Project introduction
+一、项目简介
+
+1.本项目由Django担任后端（文件夹/FindAnimals），微信小程序担任前端端(文件夹/fztujian/fztujian)，主要功能就是用户拍照上传、评论相关动物信息，管理员管理相信。
+2.需要使用https沟通前后端，wulara.top，公有IP47.103.53.186，私有IP172.24.28.193。
+3.需要搭建代理使项目可以长期运行，而且不会占用操作界面，可以考虑nginx之类的。
+4.项目github地址为：https://github.com/shylara-zhou/FindAnimals/tree/main/FindAnimals，建立连接，以便更新数据。
+
+
+二、项目结构分析
+后端部分：
+
+后端代码位于 FindAnimals/FindAnimals 文件夹中。
+包含 Django 标准文件如 manage.py、settings.py、urls.py 和 wsgi.py。
+数据库文件为 db.sqlite3，可能是一个 SQLite 数据库。
+存在多个应用模块（如 accounts 和 animalsdata），每个模块包含模型、视图、序列化器等。
+前端部分：
+
+前端代码位于 FindAnimals/fztujian/fztujian 文件夹中。
+包含微信小程序的标准文件（如 .js、.json、.wxml 和 .wxss）。
+媒体文件：
+
+媒体文件存储在 FindAnimals/media 文件夹中，包括图片和其他资源。
+脚本文件：
+
+项目包含一些脚本文件（如 scripts/assign_sample_photos.py 和 scripts/download_sample_images.py），可能是用于初始化数据或生成资源的工具。
+依赖管理：
+
+存在一个 requirements.txt 文件，可能列出了项目所需的 Python 依赖。
+
+三、存在virtualenv FindAnimals/venv虚拟环境
+source FindAnimals/venv/bin/activate
+四、启动方式和https的配置
+source FindAnimals/venv/bin/activate && nohup python FindAnimals/FindAnimals/manage.py runserver 0.0.0.0:8000 > django.log 2>&1 &
+[1] 65673
+sudo systemctl reload nginx
+curl http://wulara.top/.well-known/acme-challenge/test
+
+sudo certbot --nginx -d wulara.top认证了https了
+
+恭喜！您已成功为 wulara.top 启用了 HTTPS。Certbot 已经自动获取了 SSL 证书，并将其部署到 Nginx 配置文件中。
+
+接下来，您可以访问 https://wulara.top 来验证 HTTPS 是否正常工作。此外，Certbot 还设置了一个定时任务，以确保您的证书在到期前自动续期。
+
+如果需要进一步调整 Nginx 配置，可以编辑 /etc/nginx/conf.d/django.conf 文件，并使用以下命令重新加载 Nginx：sudo systemctl reload nginx。
+
+虚拟环境FindAnimals/source venv/bin/activate
+
+
+
+
+
+
+source FindAnimals/venv/bin/activate && nohup python FindAnimals/FindAnimals/manage.py runserver 0.0.0.0:8000 > django.log 2>&1 &
+[1] 65673
+sudo systemctl reload nginx
+curl http://wulara.top/.well-known/acme-challenge/test
+
+sudo certbot --nginx -d wulara.top认证了https了
+
+恭喜！您已成功为 wulara.top 启用了 HTTPS。Certbot 已经自动获取了 SSL 证书，并将其部署到 Nginx 配置文件中。
+
+接下来，您可以访问 https://wulara.top 来验证 HTTPS 是否正常工作。此外，Certbot 还设置了一个定时任务，以确保您的证书在到期前自动续期。
+
+如果需要进一步调整 Nginx 配置，可以编辑 /etc/nginx/conf.d/django.conf 文件，并使用以下命令重新加载 Nginx：sudo systemctl reload nginx。
+
+虚拟环境FindAnimals/source venv/bin/activate
