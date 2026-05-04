@@ -180,7 +180,10 @@ class StatusUpdateViewSet(PaginationMetaMixin, RateLimitMixin, viewsets.ModelVie
         limit_resp = self.check_rate_limit(AnimalStatusUpdate, request.user)
         if limit_resp:
             return limit_resp
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return std(serializer.data)
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
@@ -211,7 +214,11 @@ class CommentViewSet(PaginationMetaMixin, RateLimitMixin, viewsets.ModelViewSet)
         limit_resp = self.check_rate_limit(AnimalComment, request.user)
         if limit_resp:
             return limit_resp
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return std(serializer.data)
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
