@@ -1,7 +1,8 @@
 Project introduction
+你是一个服务器，要运行./FindAnimals，学习一下./FindAnimals/ProjectIntroduction.txt,然后我们开始相关操作
 一、项目简介
 
-1.本项目由Django担任后端（文件夹/FindAnimals），微信小程序担任前端端(文件夹/fztujian/fztujian)，主要功能就是用户拍照上传、评论相关动物信息，管理员管理相信。
+1.本项目由Django担任后端（文件夹./FindAnimals/FindAnimals），微信小程序担任前端端(文件夹./FindAnimals/fztujian/fztujian)，主要功能就是用户拍照上传、评论相关动物信息，管理员管理相信。
 2.需要使用https沟通前后端，wulara.top，公有IP47.103.53.186，私有IP172.24.28.193。
 3.需要搭建代理使项目可以长期运行，而且不会占用操作界面，可以考虑nginx之类的。
 4.项目github地址为：https://github.com/shylara-zhou/FindAnimals/tree/main/FindAnimals，建立连接，以便更新数据。

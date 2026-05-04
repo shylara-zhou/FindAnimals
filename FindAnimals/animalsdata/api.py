@@ -34,7 +34,23 @@ class ParkViewSet(viewsets.ModelViewSet):
         qs = self.get_queryset().filter(enabled=True) if not request.user.is_staff else self.get_queryset()
         page = self.paginate_queryset(qs)
         ser = self.get_serializer(page, many=True)
-        return std(ser.data, pagination=self.get_paginated_response({}).data.get('pagination', None))
+        
+        # 添加未探索的留白区域
+        parks_data = ser.data
+        
+        # 创建未探索区域的虚拟公园对象
+        unexplored_park = {
+            'id': 'unexplored',
+            'name': '未探索的留白区域',
+            'description': '这里是尚未探索的区域，等待你的发现和贡献！',
+            'cover_url': 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=空白区域%20留白%20简约风格&image_size=landscape_4_3',
+            'enabled': True
+        }
+        
+        # 将未探索区域添加到公园列表末尾
+        parks_data.append(unexplored_park)
+        
+        return std(parks_data, pagination=self.get_paginated_response({}).data.get('pagination', None))
 
 
 class PaginationMetaMixin:
