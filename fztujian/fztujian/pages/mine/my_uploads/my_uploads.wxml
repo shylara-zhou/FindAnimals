@@ -1,0 +1,22 @@
+<view class="container">
+  <view class="header">我的上传</view>
+  <block wx:if="{{list.length}}">
+    <block wx:for="{{list}}" wx:key="id">
+      <view class="item" bindtap="viewDetail" data-id="{{item.id}}">
+        <image class="cover" src="{{item.photo_url || 'https://picsum.photos/seed/myuploads/800/600'}}" mode="aspectFill"></image>
+        <view class="info">
+          <view class="title-line">
+            <text class="name">{{item.name}}</text>
+            <text class="status {{'status-' + item.audit_status}}">{{formatStatus(item.audit_status)}}</text>
+          </view>
+          <text class="park">📍 {{item.park_name || (item.park && item.park.name)}}</text>
+          <text class="time" wx:if="{{item.created_at_display}}">🕐 {{item.created_at_display}}</text>
+          <text class="desc">{{item.description}}</text>
+        </view>
+      </view>
+    </block>
+  </block>
+  <block wx:else>
+    <view class="empty">暂无上传，去“上传动物”试试吧</view>
+  </block>
+</view>

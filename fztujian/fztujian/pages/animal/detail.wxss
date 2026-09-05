@@ -1,0 +1,271 @@
+/**detail.wxss - 动物详情页统一样式**/
+.container {
+  padding: 20rpx;
+  background: #f5f6f8;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.header {
+  padding: 16rpx 4rpx 24rpx;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #111827;
+  display: block;
+}
+
+.subtitle {
+  font-size: 26rpx;
+  color: #6b7280;
+  display: block;
+  margin-top: 8rpx;
+  font-style: italic;
+}
+
+.cover {
+  width: 100%;
+  height: 380rpx;
+  background: #f3f4f6;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.06);
+}
+
+/* meta行 */
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin: 24rpx 4rpx;
+  font-size: 24rpx;
+  color: #6b7280;
+}
+
+.meta-item {
+  background: #fff;
+  padding: 10rpx 20rpx;
+  border-radius: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+/* 描述框 */
+.desc {
+  background: #fff;
+  padding: 24rpx;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  color: #4b5563;
+  line-height: 1.7;
+  box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.06);
+}
+
+/* 评论区 */
+.comments {
+  margin-top: 24rpx;
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 24rpx;
+  box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.06);
+}
+
+.comments-header {
+  font-size: 32rpx;
+  font-weight: 700;
+  margin-bottom: 4rpx;
+  color: #111827;
+}
+
+.comments-page-indicator {
+  font-size: 24rpx;
+  color: #9ca3af;
+  margin-bottom: 16rpx;
+}
+
+.comment-item {
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f3f4f6;
+}
+
+.comment-item:last-child {
+  border-bottom: none;
+}
+
+.comment-user {
+  color: #16a34a;
+  font-weight: 600;
+  margin-right: 8rpx;
+  font-size: 26rpx;
+}
+
+.comment-content {
+  color: #374151;
+  font-size: 28rpx;
+  line-height: 1.6;
+}
+
+.comment-time {
+  color: #9ca3af;
+  font-size: 22rpx;
+  display: block;
+  margin-top: 8rpx;
+}
+
+.comment-empty {
+  text-align: center;
+  padding: 60rpx 0;
+  color: #9ca3af;
+  font-size: 26rpx;
+}
+
+.load-more {
+  width: 100%;
+  margin-top: 16rpx;
+  padding: 18rpx 0;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #fff;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  box-shadow: 0 4rpx 12rpx rgba(22, 163, 74, 0.3);
+  text-align: center;
+}
+
+.comment-end {
+  text-align: center;
+  padding: 16rpx 0;
+  color: #d1d5db;
+  font-size: 24rpx;
+}
+
+/* 评论输入 */
+.comment-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f3f4f6;
+  align-items: center;
+}
+
+.comment-input .input {
+  flex: 1;
+  min-width: 300rpx;
+  background: #f9fafb;
+  padding: 18rpx 24rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  color: #1f2937;
+  border: 1rpx solid #e5e7eb;
+}
+
+.page-indicator {
+  width: 100%;
+  font-size: 22rpx;
+  color: #d1d5db;
+  text-align: center;
+  order: 3;
+}
+
+.send-btn {
+  padding: 0 32rpx;
+  height: 72rpx;
+  line-height: 72rpx;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #fff;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  box-shadow: 0 4rpx 12rpx rgba(22, 163, 74, 0.3);
+}
+
+.send-btn:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+/* 评论文字行 */
+.comment-row {
+  display: block;
+}
+
+/* 评论配图 */
+.comment-photo {
+  width: 220rpx;
+  height: 220rpx;
+  border-radius: 16rpx;
+  margin-top: 12rpx;
+  background: #f3f4f6;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+/* 待审核标签 */
+.audit-pending-tag {
+  display: inline-block;
+  margin-top: 10rpx;
+  padding: 6rpx 16rpx;
+  background: #fffbeb;
+  color: #b45309;
+  font-size: 22rpx;
+  border-radius: 20rpx;
+}
+
+/* 已选图片预览 */
+.comment-image-preview {
+  position: relative;
+  width: 160rpx;
+  margin: 16rpx 0 0;
+}
+
+.comment-image-preview image {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 16rpx;
+  background: #f3f4f6;
+  border: 1rpx solid #e5e7eb;
+}
+
+.comment-image-preview .remove-btn {
+  position: absolute;
+  top: -12rpx;
+  right: -12rpx;
+  width: 40rpx;
+  height: 40rpx;
+  line-height: 36rpx;
+  text-align: center;
+  background: rgba(17, 24, 39, 0.75);
+  color: #fff;
+  border-radius: 50%;
+  font-size: 28rpx;
+}
+
+/* 选图按钮 */
+.img-btn {
+  width: 72rpx;
+  height: 72rpx;
+  line-height: 68rpx;
+  text-align: center;
+  font-size: 36rpx;
+  background: #f9fafb;
+  border: 1rpx solid #e5e7eb;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.img-btn:active {
+  background: #ecfdf5;
+  transform: scale(0.95);
+}
+
+/* 配图审核提示 */
+.img-hint {
+  width: 100%;
+  order: 3;
+  font-size: 22rpx;
+  color: #b45309;
+  background: #fffbeb;
+  border-radius: 12rpx;
+  padding: 8rpx 16rpx;
+  text-align: center;
+}

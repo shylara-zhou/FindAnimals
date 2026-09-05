@@ -1,0 +1,38 @@
+<view class="page">
+  <view class="page-header">
+    <text class="page-title">📮 图鉴信箱</text>
+    <text class="page-subtitle">来自 wulara 的信件通知，点击信件展开阅读</text>
+  </view>
+
+  <!-- 信件时间轴 -->
+  <view class="timeline">
+    <view class="timeline-item" wx:for="{{letters}}" wx:key="date">
+      <view class="timeline-dot {{activeDate === item.date ? 'active' : ''}}"></view>
+      <view class="timeline-content">
+        <text class="letter-date">{{item.date}}</text>
+        <view class="letter-card {{activeDate === item.date ? 'open' : ''}}" bindtap="toggleLetter" data-date="{{item.date}}">
+          <view class="letter-head">
+            <text class="letter-title">{{item.title}}</text>
+            <text class="letter-arrow">{{activeDate === item.date ? '▲' : '▼'}}</text>
+          </view>
+
+          <!-- 信件全文（展开时显示） -->
+          <view class="letter-body" wx:if="{{activeDate === item.date}}">
+            <text class="greeting">{{item.greeting}}</text>
+            <block wx:for="{{item.blocks}}" wx:for-item="block" wx:key="index">
+              <text wx:if="{{block.type === 'h'}}" class="section-title">{{block.text}}</text>
+              <text wx:elif="{{block.type === 'li'}}" class="list-item">{{block.text}}</text>
+              <text wx:else class="paragraph indent">{{block.text}}</text>
+            </block>
+            <text class="signature">{{item.signature}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 联系方式 -->
+  <view class="contact-card">
+    <text class="contact-text">📮 有事联系：1035823442@qq.com</text>
+  </view>
+</view>

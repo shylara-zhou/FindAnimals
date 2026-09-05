@@ -1,0 +1,365 @@
+/**index.wxss - 登录页统一样式**/
+page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #ecfdf5 0%, #f5f6f8 60%);
+}
+
+.scrollarea {
+  flex: 1;
+  overflow-y: hidden;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 40rpx;
+}
+
+/* 返回按钮 */
+.back-btn {
+  display: flex;
+  align-items: center;
+  padding: 14rpx 26rpx;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 40rpx;
+  margin-bottom: 40rpx;
+  align-self: flex-start;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+  border: 1rpx solid #e5e7eb;
+}
+
+.back-icon {
+  font-size: 32rpx;
+  color: #6b7280;
+  margin-right: 8rpx;
+}
+
+.back-text {
+  font-size: 26rpx;
+  color: #6b7280;
+}
+
+/* Logo区域 */
+.logo-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 70rpx;
+}
+
+.logo-img {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 40rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 8rpx 24rpx rgba(22, 163, 74, 0.15);
+  border: 4rpx solid #fff;
+}
+
+.app-title {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 12rpx;
+  letter-spacing: 1rpx;
+}
+
+.app-subtitle {
+  font-size: 28rpx;
+  color: #6b7280;
+}
+
+/* 登录tabs */
+.login-tabs {
+  display: flex;
+  width: 80%;
+  margin-bottom: 50rpx;
+  background: #fff;
+  border-radius: 40rpx;
+  padding: 6rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 18rpx 0;
+  font-size: 28rpx;
+  color: #6b7280;
+  border-radius: 36rpx;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.tab.active {
+  color: #fff;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  box-shadow: 0 4rpx 12rpx rgba(22, 163, 74, 0.3);
+}
+
+/* 登录表单公共 */
+.login-form {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.wx-login-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* 头像选择 */
+.avatar-section {
+  margin-bottom: 40rpx;
+}
+
+.avatar-btn {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 50%;
+  padding: 0;
+  background: #f9fafb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 4rpx solid #fff;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.08);
+}
+
+.avatar-btn::after {
+  border: none;
+}
+
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.avatar-hint {
+  font-size: 24rpx;
+  color: #9ca3af;
+  position: absolute;
+}
+
+/* 输入区域 */
+.nickname-section,
+.quick-input-section {
+  width: 100%;
+  margin-bottom: 50rpx;
+}
+
+.nickname-label,
+.quick-label {
+  display: block;
+  font-size: 28rpx;
+  color: #374151;
+  margin-bottom: 14rpx;
+  font-weight: 500;
+}
+
+.nickname-input,
+.quick-input {
+  width: 100%;
+  height: 80rpx;
+  line-height: 80rpx;
+  padding: 0 28rpx;
+  background: #fff;
+  border: 1rpx solid #e5e7eb;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+  color: #1f2937;
+}
+
+.nickname-input:focus,
+.quick-input:focus {
+  border-color: #16a34a;
+  box-shadow: 0 0 0 4rpx rgba(22, 163, 74, 0.1);
+}
+
+/* 按钮区 */
+.button-sp-area {
+  width: 100%;
+}
+
+.wx-login-btn,
+.quick-login-btn {
+  width: 100%;
+  height: 88rpx;
+  line-height: 88rpx;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  border-radius: 44rpx;
+  font-size: 32rpx;
+  color: #fff;
+  font-weight: 500;
+  box-shadow: 0 6rpx 16rpx rgba(22, 163, 74, 0.35);
+  letter-spacing: 2rpx;
+}
+
+.wx-login-btn:active,
+.quick-login-btn:active {
+  opacity: 0.92;
+  transform: scale(0.98);
+}
+
+.wx-login-btn::after,
+.quick-login-btn::after {
+  border: none;
+}
+
+.wx-icon {
+  margin-right: 12rpx;
+  font-size: 34rpx;
+}
+
+.tip-text {
+  margin-top: 22rpx;
+  font-size: 24rpx;
+  color: #9ca3af;
+}
+
+/* 清理旧样式遗留 */
+.other-login-link,
+.wx-desc,
+.small-tip,
+.register-link,
+.userinfo,
+.form-item,
+.form-label,
+.form-input,
+.usermotto,
+.user-motto {
+  display: none;
+}
+
+/* ============ 致读者的一封信 ============ */
+.letter-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(17, 24, 39, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 40rpx;
+}
+
+.letter-card {
+  width: 100%;
+  max-height: 80vh;
+  background: #fffdf5;
+  border-radius: 24rpx;
+  padding: 40rpx 36rpx 32rpx;
+  box-sizing: border-box;
+  box-shadow: 0 12rpx 40rpx rgba(0, 0, 0, 0.25);
+  border: 1rpx solid #e7e2d0;
+  display: flex;
+  flex-direction: column;
+}
+
+.letter-stamp {
+  text-align: center;
+  font-size: 56rpx;
+  margin-bottom: 4rpx;
+}
+
+.letter-title {
+  text-align: center;
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #16a34a;
+  margin-bottom: 12rpx;
+  letter-spacing: 2rpx;
+}
+
+.letter-title-line {
+  width: 96rpx;
+  height: 6rpx;
+  border-radius: 6rpx;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  margin: 0 auto 28rpx;
+}
+
+.letter-body {
+  flex: 1;
+  max-height: 56vh;
+  margin-bottom: 24rpx;
+  padding-right: 8rpx;
+  box-sizing: border-box;
+}
+
+.letter-text {
+  display: block;
+  font-size: 28rpx;
+  color: #4b5563;
+  line-height: 1.8;
+  margin-bottom: 16rpx;
+}
+
+.letter-text.indent {
+  text-indent: 2em;
+}
+
+/* 信件章节小标题 */
+.letter-section {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #16a34a;
+  margin: 28rpx 0 14rpx;
+  padding-left: 16rpx;
+  border-left: 6rpx solid #22c55e;
+  line-height: 1.4;
+}
+
+/* 列表项 */
+.letter-li {
+  display: block;
+  font-size: 28rpx;
+  color: #4b5563;
+  line-height: 1.8;
+  margin-bottom: 10rpx;
+  padding-left: 44rpx;
+}
+
+.letter-sign {
+  display: block;
+  text-align: right;
+  font-size: 26rpx;
+  color: #9ca3af;
+  margin-top: 8rpx;
+  font-style: italic;
+}
+
+.letter-btn {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #fff;
+  border-radius: 40rpx;
+  font-size: 30rpx;
+  font-weight: 500;
+  height: 84rpx;
+  line-height: 84rpx;
+  box-shadow: 0 4rpx 12rpx rgba(22, 163, 74, 0.3);
+  margin: 0;
+}
+
+.letter-btn::after {
+  border: none;
+}
+
+.letter-btn:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}

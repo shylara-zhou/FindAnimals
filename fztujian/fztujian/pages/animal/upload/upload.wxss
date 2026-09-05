@@ -1,0 +1,198 @@
+/**upload.wxss - 上传动物页统一样式**/
+.container {
+  padding: 20rpx;
+  background: #f5f6f8;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.form-item {
+  margin-bottom: 24rpx;
+  background: #fff;
+  padding: 24rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.06);
+}
+
+.label {
+  display: block;
+  color: #374151;
+  font-size: 28rpx;
+  margin-bottom: 14rpx;
+  font-weight: 600;
+}
+
+.label::before {
+  content: "🐾 ";
+  opacity: 0.8;
+}
+
+/* 公共底色/圆角/边框（三者共用） */
+.input,
+.textarea,
+.picker-value {
+  background: #f9fafb;
+  border-radius: 16rpx;
+  border: 1rpx solid #e5e7eb;
+  font-size: 28rpx;
+  color: #1f2937;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 单行 input：硬约束 height=line-height，垂直居中不再靠 padding */
+.input {
+  height: 88rpx;
+  line-height: 88rpx;
+  padding: 0 24rpx;
+  transition: all 0.2s;
+}
+
+/* 查重状态：重名红框、可用绿框、warn黄框 */
+.input-error {
+  border-color: #ef4444 !important;
+  background: #fef2f2 !important;
+  box-shadow: 0 0 0 4rpx rgba(239, 68, 68, 0.1);
+}
+.input-ok {
+  border-color: #16a34a !important;
+  background: #ecfdf5 !important;
+}
+.input-warn {
+  border-color: #f59e0b !important;
+  background: #fffbeb !important;
+}
+
+/* 查重状态提示条（状态class直接挂在外层，兼容小程序无:has） */
+.name-check-tip {
+  display: flex;
+  align-items: center;
+  margin-top: 14rpx;
+  padding: 14rpx 18rpx;
+  border-radius: 12rpx;
+}
+
+.name-check-tip.tip-checking {
+  background: #f9fafb;
+}
+.name-check-tip.tip-checking .tip-text {
+  color: #6b7280;
+}
+
+.name-check-tip.tip-ok {
+  background: #ecfdf5;
+}
+.name-check-tip.tip-ok .tip-text {
+  color: #047857;
+}
+
+.name-check-tip.tip-duplicate {
+  background: #fef2f2;
+}
+.name-check-tip.tip-duplicate .tip-text {
+  color: #b91c1c;
+  font-weight: 500;
+}
+
+.name-check-tip.tip-warn {
+  background: #fffbeb;
+}
+.name-check-tip.tip-warn .tip-text {
+  color: #b45309;
+  font-weight: 500;
+}
+
+.tip-icon {
+  font-size: 28rpx;
+  margin-right: 10rpx;
+  flex-shrink: 0;
+}
+
+.tip-text {
+  font-size: 26rpx;
+  line-height: 1.4;
+  flex: 1;
+}
+
+/* 公园选择 picker-value：与 input 视觉高度完全对齐 */
+.picker-value {
+  height: 88rpx;
+  line-height: 88rpx;
+  padding: 0 24rpx;
+  color: #6b7280;
+}
+
+.picker-value.selected {
+  color: #1f2937;
+}
+
+/* 多行 textarea：固定行高 + 较大 padding，不使用单行的 height=line-height 策略 */
+.textarea {
+  min-height: 220rpx;
+  line-height: 1.6;
+  padding: 20rpx 24rpx;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: #16a34a;
+  background: #fff;
+  box-shadow: 0 0 0 4rpx rgba(22, 163, 74, 0.1);
+}
+
+/* 照片选择 */
+.photo-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.photo-preview {
+  width: 100%;
+  height: 400rpx;
+  background: #f3f4f6;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.06);
+}
+
+.btn {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #fff;
+  height: 72rpx;
+  line-height: 72rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  box-shadow: 0 4rpx 12rpx rgba(22, 163, 74, 0.3);
+  text-align: center;
+}
+
+.btn:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+/* 提交按钮 */
+.form-actions {
+  margin-top: 32rpx;
+  padding: 0 4rpx;
+}
+
+.submit-btn {
+  width: 100%;
+  height: 92rpx;
+  line-height: 92rpx;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #fff;
+  border-radius: 46rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  letter-spacing: 4rpx;
+  box-shadow: 0 6rpx 18rpx rgba(22, 163, 74, 0.4);
+  text-align: center;
+}
+
+.submit-btn:active {
+  opacity: 0.92;
+  transform: scale(0.98);
+}

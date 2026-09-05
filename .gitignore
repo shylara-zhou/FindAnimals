@@ -1,1 +1,48 @@
-/fztujian.rar
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.venv/
+venv/
+env/
+
+# ===== Django =====
+*.sqlite3
+*.sqlite3-journal
+/local_settings.py
+
+# ===== 媒体与用户上传文件（运行时数据，不入库）=====
+media/
+FindAnimals/media/
+
+# ===== IDE / 编辑器 =====
+.idea/
+.vscode/
+*.iml
+*.swp
+
+# ===== 微信小程序 =====
+project.private.config.json
+node_modules/
+miniprogram_npm/
+
+# ===== 打包压缩文件 =====
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# ===== 日志与临时文件 =====
+*.log
+nohup.out
+*.tmp
+
+# ===== 操作系统文件 =====
+.DS_Store
+Thumbs.db
+[Dd]esktop.ini
+
+# ===== 杂项 =====
+identifier.sqlite

@@ -1,0 +1,62 @@
+<view class="container">
+  <view class="form-item">
+    <text class="label">名称</text>
+    <input class="input {{nameCheckStatus === 'duplicate' ? 'input-error' : (nameCheckStatus === 'available' ? 'input-ok' : (nameCheckStatus === 'warn' ? 'input-warn' : ''))}}" placeholder="请输入动物名称" placeholder-style="font-size:28rpx;color:#9ca3af;" bindinput="onNameInput" bindblur="onNameBlur" data-key="name" value="{{form.name}}" />
+    <!-- 查重状态提示 -->
+    <view class="name-check-tip tip-checking" wx:if="{{nameCheckStatus === 'checking'}}">
+      <text class="tip-icon">⏳</text>
+      <text class="tip-text">正在检测是否重名...</text>
+    </view>
+    <view class="name-check-tip tip-ok" wx:elif="{{nameCheckStatus === 'available'}}">
+      <text class="tip-icon">✅</text>
+      <text class="tip-text">这个名字可以用，真棒！</text>
+    </view>
+    <view class="name-check-tip tip-duplicate" wx:elif="{{nameCheckStatus === 'duplicate'}}">
+      <text class="tip-icon">🚫</text>
+      <text class="tip-text">{{nameCheckMsg}}</text>
+    </view>
+    <view class="name-check-tip tip-warn" wx:elif="{{nameCheckStatus === 'warn'}}">
+      <text class="tip-icon">⚠️</text>
+      <text class="tip-text">{{nameCheckMsg || '服务端查重接口暂未启用，提交时会再次校验名称是否重复'}}</text>
+    </view>
+  </view>
+
+  <view class="form-item">
+    <text class="label">品种</text>
+    <input class="input" placeholder="请输入动物品种" placeholder-style="font-size:28rpx;color:#9ca3af;" bindinput="onInput" data-key="species" value="{{form.species}}" />
+  </view>
+
+  <view class="form-item">
+    <text class="label">学名</text>
+    <input class="input" placeholder="可选，学名" placeholder-style="font-size:28rpx;color:#9ca3af;" bindinput="onInput" data-key="scientific_name" value="{{form.scientific_name}}" />
+  </view>
+
+  <view class="form-item">
+    <text class="label">所属公园</text>
+    <picker class="picker" mode="selector" range="{{parks}}" range-key="name" bindchange="onParkChange">
+      <view class="picker-value">{{selectedParkName || '请选择公园'}}</view>
+    </picker>
+  </view>
+
+  <view class="form-item">
+    <text class="label">描述</text>
+    <textarea class="textarea" placeholder="简单描述该动物" placeholder-style="font-size:28rpx;color:#9ca3af;" bindinput="onInput" data-key="description" value="{{form.description}}"></textarea>
+  </view>
+
+  <view class="form-item">
+    <text class="label">动物图片</text>
+    <view class="photo-picker">
+      <block wx:if="{{photoPath}}">
+        <image class="photo-preview" src="{{photoPath}}" mode="aspectFill"></image>
+        <button class="btn" bindtap="choosePhoto">重新选择</button>
+      </block>
+      <block wx:else>
+        <button class="btn" bindtap="choosePhoto">选择图片</button>
+      </block>
+    </view>
+  </view>
+
+  <view class="form-actions">
+    <button class="submit-btn" bindtap="submit">提交</button>
+  </view>
+</view>

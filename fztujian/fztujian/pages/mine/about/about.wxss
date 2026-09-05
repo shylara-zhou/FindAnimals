@@ -1,0 +1,206 @@
+/**about.wxss - 图鉴信箱时间轴样式**/
+page {
+  background-color: #f5f6f8;
+  min-height: 100vh;
+}
+
+.page {
+  padding: 24rpx;
+}
+
+/* 页头 */
+.page-header {
+  padding: 16rpx 8rpx 28rpx;
+}
+
+.page-title {
+  display: block;
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #111827;
+}
+
+.page-subtitle {
+  display: block;
+  font-size: 24rpx;
+  color: #9ca3af;
+  margin-top: 8rpx;
+}
+
+/* ============ 时间轴 ============ */
+.timeline {
+  position: relative;
+  padding-left: 40rpx;
+}
+
+/* 左侧竖线 */
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 9rpx;
+  top: 16rpx;
+  bottom: 16rpx;
+  width: 4rpx;
+  background: #e5e7eb;
+  border-radius: 4rpx;
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 28rpx;
+}
+
+/* 节点圆点 */
+.timeline-dot {
+  position: absolute;
+  left: -40rpx;
+  top: 6rpx;
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 50%;
+  background: #d1d5db;
+  border: 4rpx solid #f5f6f8;
+  box-sizing: content-box;
+  transition: all 0.2s;
+}
+
+.timeline-dot.active {
+  background: #16a34a;
+  box-shadow: 0 0 0 6rpx rgba(22, 163, 74, 0.15);
+}
+
+.timeline-content {
+  min-width: 0;
+}
+
+.letter-date {
+  display: inline-block;
+  font-size: 24rpx;
+  color: #6b7280;
+  background: #fff;
+  padding: 4rpx 18rpx;
+  border-radius: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  margin-bottom: 12rpx;
+}
+
+/* ============ 信件卡片 ============ */
+.letter-card {
+  background: #fff;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.06);
+  padding: 28rpx 28rpx;
+  border: 1rpx solid transparent;
+  transition: all 0.2s;
+}
+
+.letter-card:active {
+  transform: scale(0.985);
+}
+
+/* 展开状态：米白信纸质感 */
+.letter-card.open {
+  background: #fffdf5;
+  border-color: #e7e2d0;
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.08);
+}
+
+.letter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.letter-title {
+  flex: 1;
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #1f2937;
+  line-height: 1.5;
+}
+
+.letter-card.open .letter-title {
+  color: #16a34a;
+}
+
+.letter-arrow {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+  font-size: 22rpx;
+  color: #9ca3af;
+}
+
+/* ============ 信件正文 ============ */
+.letter-body {
+  margin-top: 24rpx;
+  padding-top: 24rpx;
+  border-top: 2rpx dashed #e7e2d0;
+}
+
+.greeting {
+  display: block;
+  font-size: 28rpx;
+  color: #374151;
+  font-weight: 500;
+  margin-bottom: 16rpx;
+}
+
+.paragraph {
+  display: block;
+  font-size: 28rpx;
+  line-height: 1.8;
+  color: #4b5563;
+  margin-bottom: 16rpx;
+}
+
+.paragraph.indent {
+  text-indent: 2em;
+}
+
+/* 章节小标题 */
+.section-title {
+  display: block;
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #16a34a;
+  margin: 28rpx 0 14rpx;
+  padding-left: 16rpx;
+  border-left: 6rpx solid #22c55e;
+  line-height: 1.4;
+}
+
+/* 列表项 */
+.list-item {
+  display: block;
+  font-size: 28rpx;
+  color: #4b5563;
+  line-height: 1.8;
+  margin-bottom: 10rpx;
+  padding-left: 44rpx;
+}
+
+.signature {
+  display: block;
+  text-align: right;
+  color: #9ca3af;
+  margin-top: 28rpx;
+  padding-top: 18rpx;
+  border-top: 2rpx dashed #e7e2d0;
+  font-size: 26rpx;
+  font-style: italic;
+}
+
+/* ============ 联系方式 ============ */
+.contact-card {
+  margin-top: 36rpx;
+  background: #ecfdf5;
+  border-radius: 20rpx;
+  padding: 28rpx;
+  text-align: center;
+}
+
+.contact-text {
+  font-size: 28rpx;
+  color: #047857;
+  font-weight: 600;
+}

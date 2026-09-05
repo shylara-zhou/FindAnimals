@@ -1,0 +1,91 @@
+<!--index.wxml-->
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    <view class="back-btn" bindtap="goBack">
+      <text class="back-icon">←</text>
+      <text class="back-text">返回浏览</text>
+    </view>
+
+    <view class="logo-area">
+      <image class="logo-img" src="https://wulara.top/media/img/008s5Vd4ly1h2s2hzdc2zj301e01edfl.jpg" mode="aspectFill"></image>
+      <text class="app-title">福州动物图鉴</text>
+      <text class="app-subtitle">发现身边的野生动物</text>
+    </view>
+
+    <view class="login-tabs">
+      <view class="tab {{loginType === 'quick' ? 'active' : ''}}" bindtap="switchLoginType" data-type="quick">快捷登录</view>
+      <view class="tab {{loginType === 'wx' ? 'active' : ''}}" bindtap="switchLoginType" data-type="wx">微信登录</view>
+    </view>
+
+    <!-- 快捷登录 -->
+    <view class="login-form" wx:if="{{loginType === 'quick'}}">
+      <view class="quick-input-section">
+        <text class="quick-label">输入昵称即可登录</text>
+        <input class="quick-input" type="text" placeholder="请输入昵称" value="{{userInfo.nickName}}" bindinput="onNicknameInput" />
+      </view>
+      <view class="button-sp-area">
+        <button class="weui-btn weui-btn_primary quick-login-btn" bindtap="quickLogin">快捷登录</button>
+      </view>
+      <view class="tip-text">未注册用户将自动注册</view>
+    </view>
+
+    <!-- 微信登录 -->
+    <view class="login-form" wx:if="{{loginType === 'wx'}}">
+      <view class="wx-login-section">
+        <view class="avatar-section">
+          <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+            <image class="avatar-img" src="{{userInfo.avatarUrl || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+            <view class="avatar-hint" wx:if="{{!userInfo.avatarUrl}}">点击选择头像</view>
+          </button>
+        </view>
+
+        <view class="nickname-section">
+          <text class="nickname-label">微信昵称</text>
+          <input class="nickname-input" type="nickname" placeholder="请输入昵称" value="{{userInfo.nickName}}" bindinput="onNicknameInput" />
+        </view>
+
+        <view class="button-sp-area">
+          <button class="weui-btn weui-btn_primary wx-login-btn" bindtap="wxLogin" loading="{{logging}}">
+            <text class="wx-icon">💬</text>
+            <text>微信一键登录</text>
+          </button>
+        </view>
+        <view class="tip-text">未注册用户将自动注册</view>
+      </view>
+    </view>
+
+
+  </view>
+</scroll-view>
+
+<!-- 致读者的一封信（新用户首次注册展示） -->
+<view class="letter-mask" wx:if="{{showWelcomeLetter}}">
+  <view class="letter-card">
+    <view class="letter-stamp">📮</view>
+    <view class="letter-title">致“虎纠动物图鉴”用户的第一封信</view>
+    <view class="letter-title-line"></view>
+    <scroll-view scroll-y class="letter-body">
+      <text class="letter-text">各位“探险家”：</text>
+      <text class="letter-text indent">感谢使用“虎纠动物图鉴”，我是wulara。</text>
+
+      <text class="letter-section">✨ 你可以这样参与</text>
+      <text class="letter-li">🐾 上传你遇见的小动物居民，丰富图鉴</text>
+      <text class="letter-li">🌿 探索各个公园的小动物居民</text>
+      <text class="letter-li">🏆 看看谁发现的小动物居民最受欢迎</text>
+
+      <text class="letter-section">🏡 建立初衷</text>
+      <text class="letter-text indent">本图鉴建立的初衷，是为了看到许多流浪动物的生存状态。现在总是在各个公园、小区、街头等区域看到不少流浪的小动物。小动物们因为流浪难免有一些伤痕，而人类们因为各种原因也做不到一一收养。并且在我看来，广大天地之下的他们，也有他们的自由和快乐，被收养也未必是一种幸福。</text>
+      <text class="letter-text indent">可是大家看到他们时，看到的只是一些“痕迹”，难免感到同情和怜悯，所以我想有这样一个小程序图鉴。</text>
+
+
+      <text class="letter-section">💡 几个小提示</text>
+      <text class="letter-text indent">1. 上传动物：第一个上传这只小动物居民的“探险家”，可以为它命名；</text>
+      <text class="letter-text indent">2. 评论：对已有的小动物进行评论，了解记录它的近况，让这个区域的大家都知道它的存在；</text>
+      <text class="letter-text indent">3. 本图鉴登录不需要密码，也没有敏感数据。如果有你想关心的人，可以登录他的账户，了解他上传了哪些动物；</text>
+      <text class="letter-text indent">4. 它们是小动物也是居民。</text>
+      <text class="letter-text indent">上传内容不求专业准确，希望大家开心，活在爱里面！</text>
+      <text class="letter-sign">—— wulara</text>
+    </scroll-view>
+    <button class="letter-btn" bindtap="closeWelcomeLetter">开始探索 🐾</button>
+  </view>
+</view>

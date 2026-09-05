@@ -1,0 +1,52 @@
+<view class="container">
+  <view class="header">
+    <text class="title">{{animal.name}}</text>
+    <text class="subtitle">{{animal.scientific_name || ''}}</text>
+  </view>
+  <image class="cover" src="{{animal.photo_url}}" mode="aspectFill"></image>
+  <view class="meta">
+    <text class="meta-item">📍 {{animal.park_name || (animal.park && animal.park.name)}}</text>
+    <text class="meta-item">🔥 浏览 {{animal.views_count || 0}}</text>
+    <text class="meta-item">👤 第一发现人：{{(animal.discoverer_name) || '未知用户'}}</text>
+    <text class="meta-item" wx:if="{{animalTimeDisplay}}">🕐 {{animalTimeDisplay}}</text>
+  </view>
+  <view class="desc">{{animal.description || '暂无描述'}}</view>
+
+  <view class="comments">
+    <view class="comments-header">评论（{{commentTotal}}）</view>
+    <view class="comments-page-indicator">第 {{commentPage}} / {{commentTotalPages}} 页</view>
+    <block wx:for="{{comments}}" wx:key="id">
+      <view class="comment-item">
+        <view class="comment-row">
+          <text class="comment-user">{{item.user && item.user.nickname || '匿名'}}：</text>
+          <text class="comment-content">{{item.content}}</text>
+        </view>
+        <image wx:if="{{item.photo_url}}" class="comment-photo" src="{{item.photo_url}}" mode="aspectFill" data-url="{{item.photo_url}}" bindtap="previewCommentPhoto" />
+        <text class="audit-pending-tag" wx:if="{{item.photo_audit_status === 'pending'}}">⏳ 待审核</text>
+        <text class="comment-time">{{item.created_at_display || item.created_at}}</text>
+      </view>
+    </block>
+    <block wx:if="{{commentTotal === 0}}">
+      <view class="comment-empty">暂无评论</view>
+    </block>
+    <block wx:if="{{commentTotal > 0}}">
+      <block wx:if="{{commentPage < commentTotalPages}}">
+        <button class="load-more" bindtap="loadMoreComments">加载更多</button>
+      </block>
+      <block wx:else>
+        <view class="comment-end">已到底</view>
+      </block>
+    </block>
+    <!-- 已选图片预览 -->
+    <view class="comment-image-preview" wx:if="{{commentImage}}">
+      <image src="{{commentImage}}" mode="aspectFill" bindtap="previewCommentImage" />
+      <view class="remove-btn" catchtap="removeCommentImage">×</view>
+    </view>
+    <view class="comment-input">
+      <view class="img-btn" bindtap="chooseCommentImage">📷</view>
+      <input class="input" placeholder="写下你的看法..." bindinput="onCommentInput" value="{{commentText}}" />
+      <button class="send-btn" bindtap="sendComment">发送</button>
+      <text class="img-hint" wx:if="{{commentImage}}">📷 配图将等待审核后显示</text>
+    </view>
+  </view>
+</view>

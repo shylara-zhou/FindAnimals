@@ -1,0 +1,131 @@
+page {
+  background-color: #f5f6f8;
+  min-height: 100vh;
+}
+
+.page {
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.profile-card {
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  border-radius: 24rpx;
+  padding: 40rpx 32rpx;
+  box-shadow: 0 8rpx 24rpx rgba(22,163,74,0.25);
+  margin-bottom: 24rpx;
+  position: relative;
+  overflow: hidden;
+}
+
+.profile-card::after {
+  content: '';
+  position: absolute;
+  right: -40rpx;
+  top: -40rpx;
+  width: 160rpx;
+  height: 160rpx;
+  background: rgba(255,255,255,0.1);
+  border-radius: 50%;
+}
+
+.profile-card::before {
+  content: '';
+  position: absolute;
+  right: 60rpx;
+  bottom: -60rpx;
+  width: 120rpx;
+  height: 120rpx;
+  background: rgba(255,255,255,0.08);
+  border-radius: 50%;
+}
+
+.profile-content {
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  margin-right: 24rpx;
+  border: 4rpx solid rgba(255, 255, 255, 0.4);
+  background: rgba(255,255,255,0.2);
+}
+
+.name-and-action {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1);
+}
+
+.list-card {
+  background: #ffffff;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 14rpx rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+.list-title {
+  display: block;
+  font-size: 26rpx;
+  color: #9ca3af;
+  padding: 20rpx 28rpx 0;
+  font-weight: 500;
+}
+
+.menu-item {
+  padding: 28rpx 28rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 30rpx;
+  color: #1f2937;
+  border-top: 1rpx solid #f3f4f6;
+  transition: background 0.15s;
+}
+
+.menu-item:active {
+  background: #f9fafb;
+}
+
+.menu-item:first-of-type {
+  border-top: none;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 18rpx;
+}
+
+.icon {
+  font-size: 36rpx;
+  width: 48rpx;
+  text-align: center;
+}
+
+.label {
+  font-size: 30rpx;
+  color: #374151;
+}
+
+.arrow {
+  color: #c4c8d0;
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+.menu-item.logout .label {
+  color: #ef4444;
+}

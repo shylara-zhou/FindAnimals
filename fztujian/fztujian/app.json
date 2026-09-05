@@ -1,0 +1,49 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/index/index",
+    "pages/animal/detail",
+    "pages/animal/upload/upload",
+    "pages/mine/my_uploads/my_uploads",
+    "pages/home/animals/animals",
+    "pages/rank/rank",
+    "pages/mine/mine",
+    "pages/mine/about/about",
+    "pages/logs/logs"
+  ],
+  "tabBar": {
+    "color": "#9ca3af",
+    "selectedColor": "#16a34a",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "探索",
+        "iconPath": "images/tab/explore.png",
+        "selectedIconPath": "images/tab/explore_active.png"
+      },
+      {
+        "pagePath": "pages/rank/rank",
+        "text": "排行",
+        "iconPath": "images/tab/rank.png",
+        "selectedIconPath": "images/tab/rank_active.png"
+      },
+      {
+        "pagePath": "pages/mine/mine",
+        "text": "我的",
+        "iconPath": "images/tab/mine.png",
+        "selectedIconPath": "images/tab/mine_active.png"
+      }
+    ]
+  },
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "福州动物图鉴",
+    "navigationBarBackgroundColor": "#ffffff"
+  },
+  "style": "v2",
+  "componentFramework": "glass-easel",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}
