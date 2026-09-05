@@ -17,6 +17,15 @@ import urllib.request
 def std(data=None, code=200, msg='ok', pagination=None):
     return Response({'code': code, 'msg': msg, 'data': data, 'pagination': pagination})
 
+USER_LETTER_TITLE = '致用户的一封信'
+USER_LETTER_CONTENT = """欢迎你来到福州动物图鉴。
+
+你可以拍照上传动物信息、记录观察、分享见闻，也可以在评论区与大家交流。
+
+我们会对用户上传的内容进行审核，以保证信息的准确与社区的友好。
+
+感谢你的参与，祝你探索愉快。"""
+
 
 class ParkViewSet(viewsets.ModelViewSet):
     queryset = Park.objects.all()
@@ -76,7 +85,7 @@ class AnimalViewSet(PaginationMetaMixin, RateLimitMixin, viewsets.ModelViewSet):
     ordering_fields = ['created_at', 'views_count', 'discovered_at']
 
     def get_permissions(self):
-        if self.action in ['list', 'retrieve', 'search', 'by_park', 'ranking']:
+        if self.action in ['list', 'retrieve', 'search', 'by_park', 'ranking', 'check_name']:
             return [permissions.AllowAny()]
         return [permissions.IsAuthenticated()]
 
@@ -87,6 +96,7 @@ class AnimalViewSet(PaginationMetaMixin, RateLimitMixin, viewsets.ModelViewSet):
 
     def list(self, request, *args, **kwargs):
         qs = self.get_queryset().filter(audit_status='approved')
+        qs = self.filter_queryset(qs)
         page = self.paginate_queryset(qs)
         ser = self.get_serializer(page, many=True)
         pagination = self._pagination_meta()
@@ -120,6 +130,24 @@ class AnimalViewSet(PaginationMetaMixin, RateLimitMixin, viewsets.ModelViewSet):
         pagination = self._pagination_meta()
         return std(ser.data, pagination=pagination)
 
+    @action(detail=False, methods=['get'], permission_classes=[permissions.AllowAny()])
+    def check_name(self, request):
+        name = (request.query_params.get('name') or '').strip()
+        if not name:
+            return std(code=400, msg='请输入动物名称')
+
+        exists = Animal.objects.filter(name__iexact=name).first()
+        if exists:
+            return std({
+                'duplicate': True,
+                'name': exists.name,
+                'park_name': exists.park.name if exists.park else None,
+                'discoverer': exists.discoverer.nickname if exists.discoverer else None,
+                'audit_status': exists.audit_status,
+            }, msg=f'「{exists.name}」已经存在啦，换个名字试试吧')
+
+        return std({'duplicate': False}, msg='这个名字可以用')
+
     @action(detail=False, methods=['get'])
     def ranking(self, request):
         sort_type = int(request.query_params.get('sort_type', 1))
@@ -143,14 +171,52 @@ class AnimalViewSet(PaginationMetaMixin, RateLimitMixin, viewsets.ModelViewSet):
         return std(ser.data)
 
     def create(self, request, *args, **kwargs):
+        from django.db import IntegrityError
+        from rest_framework import serializers as sr_serializers
+
         limit_resp = self.check_rate_limit(Animal, request.user)
         if limit_resp:
             return limit_resp
-        ser = self.get_serializer(data=request.data)
-        ser.is_valid(raise_exception=True)
-        animal = ser.save()
-        # ensure response uses context with request so URLs are absolute
-        return std(self.get_serializer(animal).data)
+
+        data = request.data.copy()
+        data['discoverer_id'] = request.user.id
+
+        ser = self.get_serializer(data=data)
+
+        try:
+            ser.is_valid(raise_exception=True)
+        except sr_serializers.ValidationError as e:
+            msg = '提交内容有误'
+            err_detail = getattr(e, 'detail', None)
+            if isinstance(err_detail, dict):
+                for _field, errs in err_detail.items():
+                    if isinstance(errs, list) and errs:
+                        msg = str(errs[0])
+                        break
+                    if isinstance(errs, str) and errs:
+                        msg = errs
+                        break
+            elif isinstance(err_detail, list) and err_detail:
+                msg = str(err_detail[0])
+            elif isinstance(err_detail, str) and err_detail:
+                msg = err_detail
+            else:
+                msg = str(e)
+            return std(code=400, msg=msg)
+        except Exception as e:
+            return std(code=400, msg=str(e))
+
+        try:
+            animal = ser.save()
+        except IntegrityError as e:
+            estr = str(e).lower()
+            if 'unique' in estr and 'name' in estr:
+                return std(code=400, msg='动物名称已存在，请换一个名字（刚刚有人先一步注册了）')
+            return std(code=400, msg=f'数据保存失败：{e}')
+        except Exception as e:
+            return std(code=400, msg=f'保存时出错：{e}')
+
+        return std(self.get_serializer(animal).data, msg='上传成功，等待审核')
 
     # pagination meta moved to PaginationMetaMixin
 
@@ -164,7 +230,10 @@ class StatusUpdateViewSet(PaginationMetaMixin, RateLimitMixin, viewsets.ModelVie
         limit_resp = self.check_rate_limit(AnimalStatusUpdate, request.user)
         if limit_resp:
             return limit_resp
-        return super().create(request, *args, **kwargs)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        return std(serializer.data)
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
@@ -192,10 +261,50 @@ class CommentViewSet(PaginationMetaMixin, RateLimitMixin, viewsets.ModelViewSet)
     filterset_fields = ['animal']
 
     def create(self, request, *args, **kwargs):
+        from rest_framework import serializers as sr_serializers
+
         limit_resp = self.check_rate_limit(AnimalComment, request.user)
         if limit_resp:
             return limit_resp
-        return super().create(request, *args, **kwargs)
+
+        data = request.data.copy()
+        data['user_id'] = request.user.id
+
+        serializer = self.get_serializer(data=data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except sr_serializers.ValidationError as e:
+            msg = '提交内容有误'
+            err_detail = getattr(e, 'detail', None)
+            if isinstance(err_detail, dict):
+                for _field, errs in err_detail.items():
+                    if isinstance(errs, list) and errs:
+                        msg = str(errs[0])
+                        break
+                    if isinstance(errs, str) and errs:
+                        msg = errs
+                        break
+            elif isinstance(err_detail, list) and err_detail:
+                msg = str(err_detail[0])
+            elif isinstance(err_detail, str) and err_detail:
+                msg = err_detail
+            else:
+                msg = str(e)
+            return std(code=400, msg=msg)
+        except Exception as e:
+            return std(code=400, msg=str(e))
+
+        has_photo = bool(serializer.validated_data.get('photo'))
+        try:
+            if has_photo:
+                comment = serializer.save(photo_audit_status='pending')
+            else:
+                comment = serializer.save(photo_audit_status='approved')
+        except Exception as e:
+            return std(code=400, msg=f'保存时出错：{e}')
+
+        msg = '评论发布成功，图片等待审核' if has_photo else '评论发布成功'
+        return std(self.get_serializer(comment).data, msg=msg)
 
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
@@ -288,7 +397,7 @@ class WxLoginView(APIView):
             user = authenticate(username=username, password=password)
             if user:
                 token, _ = Token.objects.get_or_create(user=user)
-                return std({'token': token.key, 'user_id': user.id, 'is_staff': user.is_staff})
+                return std({'token': token.key, 'user_id': user.id, 'is_staff': user.is_staff, 'is_new_user': False})
             else:
                 return std(code=400, msg='invalid credentials')
 
@@ -296,12 +405,16 @@ class WxLoginView(APIView):
         mname = request.data.get('mname')
         if mname and mname != 'undefined':
             User = get_user_model()
-            user, created = User.objects.get_or_create(username=mname, defaults={'nickname': mname})
-            if created:
+            existing_user = User.objects.filter(nickname=mname).first()
+            if existing_user:
+                token, _ = Token.objects.get_or_create(user=existing_user)
+                return std({'token': token.key, 'user_id': existing_user.id, 'is_staff': existing_user.is_staff, 'is_new_user': False})
+            else:
+                user = User.objects.create(username=mname, nickname=mname)
                 user.set_unusable_password()
                 user.save()
-            token, _ = Token.objects.get_or_create(user=user)
-            return std({'token': token.key, 'user_id': user.id, 'is_staff': user.is_staff})
+                token, _ = Token.objects.get_or_create(user=user)
+                return std({'token': token.key, 'user_id': user.id, 'is_staff': user.is_staff, 'is_new_user': True})
 
         code = request.data.get('code')
         avatar_url = request.data.get('avatar_url')
@@ -322,14 +435,29 @@ class WxLoginView(APIView):
         if not openid:
             return std(code=400, msg='invalid code')
         User = get_user_model()
-        user, _ = User.objects.get_or_create(openid=openid, defaults={'username': openid})
+        user, created = User.objects.get_or_create(openid=openid, defaults={'username': openid})
+        
+        if nickname:
+            existing_user = User.objects.filter(nickname=nickname).exclude(id=user.id).first()
+            if existing_user:
+                return std(code=400, msg='该昵称已注册，请更换昵称')
+            user.nickname = nickname
+        elif not user.nickname:
+            user.nickname = f'微信用户{openid[:8]}'
+        
         if avatar_url:
             user.avatar_url = avatar_url
-        if nickname:
-            user.nickname = nickname
         user.save()
         token, _ = Token.objects.get_or_create(user=user)
-        return std({'token': token.key})
+        return std({
+            'token': token.key,
+            'user_id': user.id,
+            'username': user.username,
+            'nickname': user.nickname,
+            'avatar_url': user.avatar_url,
+            'is_staff': user.is_staff,
+            'is_new_user': created
+        })
     def get(self, request):
         # Support standard login with username/password (GET fallback)
         username = request.query_params.get('username') or request.query_params.get('mname')
@@ -338,7 +466,7 @@ class WxLoginView(APIView):
             user = authenticate(username=username, password=password)
             if user:
                 token, _ = Token.objects.get_or_create(user=user)
-                return std({'token': token.key, 'user_id': user.id, 'is_staff': user.is_staff})
+                return std({'token': token.key, 'user_id': user.id, 'is_staff': user.is_staff, 'is_new_user': False})
             else:
                 return std(code=400, msg='invalid credentials')
 
@@ -346,12 +474,16 @@ class WxLoginView(APIView):
         mname = request.query_params.get('mname')
         if mname and mname != 'undefined':
             User = get_user_model()
-            user, created = User.objects.get_or_create(username=mname, defaults={'nickname': mname})
-            if created:
+            existing_user = User.objects.filter(nickname=mname).first()
+            if existing_user:
+                token, _ = Token.objects.get_or_create(user=existing_user)
+                return std({'token': token.key, 'user_id': existing_user.id, 'is_staff': existing_user.is_staff, 'is_new_user': False})
+            else:
+                user = User.objects.create(username=mname, nickname=mname)
                 user.set_unusable_password()
                 user.save()
-            token, _ = Token.objects.get_or_create(user=user)
-            return std({'token': token.key, 'user_id': user.id, 'is_staff': user.is_staff})
+                token, _ = Token.objects.get_or_create(user=user)
+                return std({'token': token.key, 'user_id': user.id, 'is_staff': user.is_staff, 'is_new_user': True})
 
         code = request.query_params.get('code')
         avatar_url = request.query_params.get('avatar_url')
@@ -372,11 +504,39 @@ class WxLoginView(APIView):
         if not openid:
             return std(code=400, msg='invalid code')
         User = get_user_model()
-        user, _ = User.objects.get_or_create(openid=openid, defaults={'username': openid})
+        user, created = User.objects.get_or_create(openid=openid, defaults={'username': openid})
+        
+        if nickname:
+            existing_user = User.objects.filter(nickname=nickname).exclude(id=user.id).first()
+            if existing_user:
+                return std(code=400, msg='该昵称已注册，请更换昵称')
+            user.nickname = nickname
+        elif not user.nickname:
+            user.nickname = f'微信用户{openid[:8]}'
+        
         if avatar_url:
             user.avatar_url = avatar_url
-        if nickname:
-            user.nickname = nickname
         user.save()
         token, _ = Token.objects.get_or_create(user=user)
-        return std({'token': token.key})
+        return std({
+            'token': token.key,
+            'user_id': user.id,
+            'username': user.username,
+            'nickname': user.nickname,
+            'avatar_url': user.avatar_url,
+            'is_staff': user.is_staff,
+            'is_new_user': created
+        })
+
+
+class LogoutView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        request.auth.delete()
+        return std(msg='logout success')
+
+
+class UserLetterView(APIView):
+    def get(self, request):
+        return std({'title': USER_LETTER_TITLE, 'content': USER_LETTER_CONTENT})

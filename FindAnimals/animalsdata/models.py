@@ -35,6 +35,9 @@ def _upload_status_photo(instance, filename):
 def _upload_park_cover(instance, filename):
     return _date_path('park_covers') + filename
 
+def _upload_comment_photo(instance, filename):
+    return _date_path('comment_photos') + filename
+
 def _validate_image_size(file):
     if file and hasattr(file, 'size'):
         if file.size > 5 * 1024 * 1024:
@@ -84,5 +87,10 @@ class AnimalComment(models.Model):
     animal = models.ForeignKey(Animal, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='animal_comments')
     content = models.TextField()
+    photo = models.ImageField(upload_to=_upload_comment_photo, validators=[_validate_image_size], null=True, blank=True)
+    photo_audit_status = models.CharField(max_length=16, default='approved')
+    photo_audit_by = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name='audited_comment_photos')
+    photo_audit_opinion = models.TextField(blank=True)
+    photo_audit_time = models.DateTimeField(null=True, blank=True)
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
     created_at = models.DateTimeField(auto_now_add=True)

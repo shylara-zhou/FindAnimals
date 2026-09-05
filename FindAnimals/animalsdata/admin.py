@@ -23,5 +23,6 @@ class AnimalStatusUpdateAdmin(admin.ModelAdmin):
     search_fields = ('content',)
 @admin.register(AnimalComment)
 class AnimalCommentAdmin(admin.ModelAdmin):
-    list_display = ('animal', 'user', 'created_at')
+    list_display = ('animal', 'user', 'photo_audit_status', 'created_at')
+    list_filter = ('photo_audit_status',)
     search_fields = ('content',)

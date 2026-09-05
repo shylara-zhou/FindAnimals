@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from animalsdata import views
 from rest_framework.routers import DefaultRouter
-from animalsdata.api import ParkViewSet, AnimalViewSet, StatusUpdateViewSet, CommentViewSet, MyInfoView, MyAnimalsViewSet, WxLoginView, RegisterView
+from animalsdata.api import ParkViewSet, AnimalViewSet, StatusUpdateViewSet, CommentViewSet, MyInfoView, MyAnimalsViewSet, WxLoginView, RegisterView, LogoutView, UserLetterView
 
 router = DefaultRouter()
 router.register(r'parks', ParkViewSet, basename='park')
@@ -26,6 +26,8 @@ urlpatterns = [
     path('wx_login/', WxLoginView.as_view()),
     path('api/register/', RegisterView.as_view()),
     path('api/login/', WxLoginView.as_view()),
+    path('api/logout/', LogoutView.as_view()),
+    path('api/user-letter/', UserLetterView.as_view()),
     path('load/', views.show_upload),
     path('upload_handle/', views.upload_handle),
 ]

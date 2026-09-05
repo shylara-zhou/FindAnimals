@@ -45,6 +45,7 @@ class ParkSerializer(serializers.ModelSerializer):
 
 class AnimalSerializer(serializers.ModelSerializer):
     discoverer = UserSimpleSerializer(read_only=True)
+    discoverer_name = serializers.CharField(source='discoverer.nickname', read_only=True, default='匿名用户')
     discoverer_id = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), write_only=True, source='discoverer')
     park_name = serializers.CharField(source='park.name', read_only=True)
     photo_url = serializers.SerializerMethodField()
@@ -53,8 +54,8 @@ class AnimalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Animal
         fields = [
-            'id', 'name', 'species', 'scientific_name', 'description', 'photo', 'photo_url', 'park', 'park_name',
-            'discoverer', 'discoverer_id', 'discovered_at', 'status', 'views_count',
+            'id', 'name', 'species', 'description','scientific_name', 'description', 'photo', 'photo_url', 'park', 'park_name',
+            'discoverer', 'discoverer_name', 'discoverer_id', 'discovered_at', 'status', 'views_count',
             'audit_status', 'audit_by', 'audit_opinion', 'audit_time', 'created_at', 'updated_at'
         ]
         read_only_fields = ['views_count', 'audit_status', 'audit_by', 'audit_opinion', 'audit_time', 'created_at', 'updated_at']
@@ -75,6 +76,14 @@ class AnimalSerializer(serializers.ModelSerializer):
             return url.replace('http://', 'https://')
         return default_path
 
+    def validate_name(self, value):
+        qs = Animal.objects.filter(name__iexact=value)
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise serializers.ValidationError(f'动物名称「{value}」已存在，请换一个名字')
+        return value
+
     def create(self, validated_data):
         validated_data['audit_status'] = 'pending'
         return super().create(validated_data)
@@ -82,12 +91,13 @@ class AnimalSerializer(serializers.ModelSerializer):
 
 class AnimalListPublicSerializer(serializers.ModelSerializer):
     discoverer = UserSimpleSerializer(read_only=True)
+    discoverer_name = serializers.CharField(source='discoverer.nickname', read_only=True, default='匿名用户')
     park_name = serializers.CharField(source='park.name', read_only=True)
     photo_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Animal
-        fields = ['id', 'name', 'species', 'photo_url', 'discoverer', 'discovered_at', 'park_name', 'views_count', 'created_at']
+        fields = ['id', 'name', 'species', 'description', 'photo_url', 'discoverer', 'discoverer_name', 'discovered_at', 'park_name', 'views_count', 'created_at']
 
     def get_photo_url(self, obj):
         request = self.context.get('request')
@@ -129,8 +139,28 @@ class StatusUpdateSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSimpleSerializer(read_only=True)
     user_id = serializers.PrimaryKeyRelatedField(queryset=get_user_model().objects.all(), write_only=True, source='user')
+    photo_url = serializers.SerializerMethodField()
+    photo = serializers.ImageField(write_only=True, required=False, allow_null=True)
+    photo_audit_status = serializers.CharField(read_only=True)
 
     class Meta:
         model = AnimalComment
-        fields = ['id', 'animal', 'user', 'user_id', 'content', 'parent', 'created_at']
+        fields = ['id', 'animal', 'user', 'user_id', 'content', 'photo', 'photo_url', 'photo_audit_status', 'parent', 'created_at']
 
+    def validate_content(self, value):
+        from .utils import find_sensitive_word
+
+        hit = find_sensitive_word(value)
+        if hit:
+            raise serializers.ValidationError(f'内容包含敏感词「{hit}」，请修改后再发布')
+        return value
+
+    def get_photo_url(self, obj):
+        if not obj.photo or obj.photo_audit_status != 'approved':
+            return None
+
+        request = self.context.get('request')
+        if request:
+            url = request.build_absolute_uri(obj.photo.url)
+            return url.replace('http://', 'https://')
+        return obj.photo.url
