@@ -2,7 +2,7 @@
   <view class="header">
     <view class="header-top">
       <view class="header-text">
-        <text class="title">福州动物图鉴</text>
+        <text class="title">虎纠动物图鉴</text>
         <text class="subtitle">发现身边的野生动物朋友 🐾</text>
       </view>
       <view class="login-entry" wx:if="{{!isLoggedIn}}" bindtap="goLogin">

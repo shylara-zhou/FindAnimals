@@ -8,7 +8,7 @@
 
     <view class="logo-area">
       <image class="logo-img" src="https://wulara.top/media/img/008s5Vd4ly1h2s2hzdc2zj301e01edfl.jpg" mode="aspectFill"></image>
-      <text class="app-title">福州动物图鉴</text>
+      <text class="app-title">虎纠动物图鉴</text>
       <text class="app-subtitle">发现身边的野生动物</text>
     </view>
 
@@ -62,7 +62,7 @@
 <view class="letter-mask" wx:if="{{showWelcomeLetter}}">
   <view class="letter-card">
     <view class="letter-stamp">📮</view>
-    <view class="letter-title">致“虎纠动物图鉴”用户的第一封信</view>
+    <view class="letter-title">致“虎纠动物图鉴”探险家的第一封信</view>
     <view class="letter-title-line"></view>
     <scroll-view scroll-y class="letter-body">
       <text class="letter-text">各位“探险家”：</text>

@@ -6,7 +6,7 @@ Page({
     letters: [
       {
         date: '2026-09-05',
-        title: '致“虎纠动物图鉴”用户的第一封信',
+        title: '致“虎纠动物图鉴”探险家的第一封信',
         greeting: '各位“探险家”：',
         blocks: [
           { type: 'p', text: '感谢使用“虎纠动物图鉴”，我是wulara。' },

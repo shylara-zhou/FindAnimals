@@ -251,7 +251,7 @@ Page({
             const id = body.data.id
             wx.showModal({
               title: '提交成功 🎉',
-              content: '谢谢您的关心，丰富了福州动物图鉴！您真棒！您的信息已提交等待wulara审核，如果很急赶紧联系他，嘿嘿',
+              content: '谢谢您的关心，丰富了虎纠动物图鉴！您真棒！您的信息已提交等待wulara审核，如果很急赶紧联系他，嘿嘿',
               showCancel: false,
               confirmText: '太棒了',
               success: () => wx.navigateTo({ url: '/pages/animal/detail?id=' + id })
@@ -301,7 +301,7 @@ Page({
             const id = body.data.id
             wx.showModal({
               title: '提交成功 🎉',
-              content: '谢谢您的关心，丰富了福州动物图鉴！您真棒！您的信息已提交等待wulara审核，如果很急赶紧联系他，嘿嘿',
+              content: '谢谢您的关心，丰富了虎纠动物图鉴！您真棒！您的信息已提交等待wulara审核，如果很急赶紧联系他，嘿嘿',
               showCancel: false,
               confirmText: '太棒了',
               success: () => wx.navigateTo({ url: '/pages/animal/detail?id=' + id })
