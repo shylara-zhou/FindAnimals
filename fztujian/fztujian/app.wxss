@@ -1,0 +1,81 @@
+/**app.wxss - 全局统一样式**/
+
+/* 全局page背景 */
+page {
+  background-color: #f5f6f8;
+  min-height: 100vh;
+  color: #1f2937;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+}
+
+/* 通用容器 */
+.page-container {
+  padding: 20rpx;
+  background-color: #f5f6f8;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 统一按钮重置（解决微信默认按钮margin/min-height问题） */
+button {
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+  line-height: normal;
+  background: transparent;
+}
+
+button::after {
+  border: none;
+}
+
+/* 通用卡片 */
+.card {
+  background: #fff;
+  border-radius: 20rpx;
+  box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.06);
+  padding: 20rpx;
+  box-sizing: border-box;
+}
+
+.card:active {
+  transform: scale(0.985);
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+  transition: all 0.2s;
+}
+
+/* 绿色渐变主按钮 */
+.btn-primary {
+  height: 72rpx;
+  line-height: 72rpx;
+  padding: 0 36rpx;
+  background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  color: #fff;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  box-shadow: 0 4rpx 12rpx rgba(22, 163, 74, 0.3);
+  text-align: center;
+}
+
+.btn-primary:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+}
+
+/* 胶囊输入框 */
+.input-capsule {
+  height: 72rpx;
+  line-height: 72rpx;
+  padding: 0 24rpx;
+  background: #fff;
+  border: 1rpx solid #e5e7eb;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+/* 旧版container兼容 */
+.container {
+  box-sizing: border-box;
+}

@@ -1,0 +1,37 @@
+<view class="container">
+  <view class="header">
+    <text class="title">🔥 热门动物榜</text>
+    <text class="subtitle">为你喜欢的动物评论吧</text>
+  </view>
+
+  <view class="animal-list">
+    <block wx:for="{{animals}}" wx:key="id" wx:for-index="index">
+      <view class="rank-card" bindtap="viewDetail" data-id="{{item.id}}">
+        <view class="rank-badge rank-{{index + 1}}">{{index + 1}}</view>
+        <image class="rank-img" src="{{item.photo_url}}" mode="aspectFill"></image>
+        <view class="rank-info">
+          <view class="rank-top">
+            <text class="rank-name">{{item.name}}</text>
+            <text class="rank-views">🔥 {{item.views_count}}</text>
+          </view>
+          <text class="rank-park">📍 {{item.park_name}}</text>
+          <text class="rank-desc">{{item.description || '暂无描述'}}</text>
+          <view class="rank-footer">
+            <view class="rank-discoverer" wx:if="{{item.discoverer}}">
+              <text class="discoverer-avatar">👤</text>
+              <text class="discoverer-text">{{item.discoverer.nickname || item.discoverer.username}}</text>
+            </view>
+            <view class="rank-discoverer" wx:else>
+              <text class="discoverer-avatar">👤</text>
+              <text class="discoverer-text">匿名</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+    <view class="empty-tip" wx:if="{{animals.length === 0}}">
+      <text class="empty-icon">🏆</text>
+      <text class="empty-text">暂无排行数据～</text>
+    </view>
+  </view>
+</view>
