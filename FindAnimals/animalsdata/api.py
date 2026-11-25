@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import timedelta, datetime, timezone as dt_timezone
 from django.utils import timezone
 from django.conf import settings
 from django.db.models import Count
@@ -7,15 +7,40 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.authtoken.models import Token
-from .models import Park, Animal, AnimalStatusUpdate, AnimalComment
+from .models import Park, Animal, AnimalStatusUpdate, AnimalComment, SystemConfig
 from .serializers import ParkSerializer, AnimalSerializer, AnimalListPublicSerializer, StatusUpdateSerializer, CommentSerializer, UserSimpleSerializer
 from django.contrib.auth import get_user_model, authenticate
 import json
 import urllib.request
 
 
-def std(data=None, code=200, msg='ok', pagination=None):
-    return Response({'code': code, 'msg': msg, 'data': data, 'pagination': pagination})
+def std(data=None, code=200, msg='ok', pagination=None, **extra):
+    resp = {'code': code, 'msg': msg, 'data': data, 'pagination': pagination}
+    resp.update(extra)
+    return Response(resp)
+
+
+def beijing_now():
+    """返回北京时间（UTC+8）的 aware datetime，不依赖 settings.TIME_ZONE"""
+    return datetime.now(dt_timezone(timedelta(hours=8)))
+
+
+def is_comment_feature_open():
+    """评论功能是否开启：总开关打开 且 当前不在夜间关闭时段（默认 00:00-08:00）"""
+    cfg = SystemConfig.get_config()
+    if not cfg.comment_enabled:
+        return False
+    now_hour = beijing_now().hour
+    start = cfg.night_start_hour
+    end = cfg.night_end_hour
+    if start == end:
+        return True
+    if start < end:
+        # 例如 0~8：在 [start, end) 区间内关闭
+        return not (start <= now_hour < end)
+    else:
+        # 跨午夜，例如 22~6：hour>=start 或 hour<end 时关闭
+        return not (now_hour >= start or now_hour < end)
 
 USER_LETTER_TITLE = '致用户的一封信'
 USER_LETTER_CONTENT = """欢迎你来到福州动物图鉴。
@@ -261,6 +286,8 @@ class CommentViewSet(PaginationMetaMixin, RateLimitMixin, viewsets.ModelViewSet)
     filterset_fields = ['animal']
 
     def create(self, request, *args, **kwargs):
+        if not is_comment_feature_open():
+            return std(code=403, msg='评论功能已关闭')
         from rest_framework import serializers as sr_serializers
 
         limit_resp = self.check_rate_limit(AnimalComment, request.user)
@@ -316,11 +343,19 @@ class CommentViewSet(PaginationMetaMixin, RateLimitMixin, viewsets.ModelViewSet)
         return super().get_queryset().order_by('-created_at')
 
     def list(self, request, *args, **kwargs):
+        open = is_comment_feature_open()
+        if not open:
+            return std(
+                [],
+                pagination={'total': 0, 'page': 1, 'page_size': 20, 'total_pages': 0},
+                comment_enabled=False,
+                msg='评论功能已关闭'
+            )
         qs = self.filter_queryset(self.get_queryset())
         page = self.paginate_queryset(qs)
         ser = self.get_serializer(page, many=True)
         pagination = self._pagination_meta()
-        return std(ser.data, pagination=pagination)
+        return std(ser.data, pagination=pagination, comment_enabled=True)
 
 
 class MyInfoView(APIView):
@@ -540,3 +575,11 @@ class LogoutView(APIView):
 class UserLetterView(APIView):
     def get(self, request):
         return std({'title': USER_LETTER_TITLE, 'content': USER_LETTER_CONTENT})
+
+
+class SystemConfigView(APIView):
+    """公共配置端点：前端据此决定是否展示评论区/评论入口"""
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request):
+        return std({'comment_enabled': is_comment_feature_open()})

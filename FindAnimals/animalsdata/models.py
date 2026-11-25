@@ -94,3 +94,23 @@ class AnimalComment(models.Model):
     photo_audit_time = models.DateTimeField(null=True, blank=True)
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='replies')
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class SystemConfig(models.Model):
+    """系统全局配置（单例，始终取 pk=1）"""
+    comment_enabled = models.BooleanField(default=True, verbose_name='评论功能总开关')
+    night_start_hour = models.IntegerField(default=0, verbose_name='夜间关闭开始(时,0-23)')
+    night_end_hour = models.IntegerField(default=8, verbose_name='夜间关闭结束(时,0-23)')
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = '系统配置'
+        verbose_name_plural = verbose_name
+
+    @classmethod
+    def get_config(cls):
+        obj, _ = cls.objects.get_or_create(pk=1, defaults={'comment_enabled': True})
+        return obj
+
+    def __str__(self):
+        return '系统配置'
